@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversi Celcius Fahrenheit</title>
+    <link rel="stylesheet" href="..//bootstrap-5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        .jarak{
+            padding-top:20px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <h3>Konversi Suhu Celcius Fahrenheit</h3>
+        <select id="pilihan" class="form-select">
+            <option value="pil" disabled> Silahkan Pilih Opsi </option>
+            <option value="ctof">Celcius -> Fahrenheit</option>
+            <option value="ftoc">Fahrenheit -> Celcius</option>    
+        </select>
+        <div id="c2f">
+            <label class="form-label">Nilai Celcius</label>
+            <input type="text" id="txC" class="form-control">
+        </div>
+        <div id="f2c">
+            <label class="form-label">Nilai Fahrenheit</label>
+            <input type="text" id="txF" class="form-control">
+        </div>
+        
+
+        <div class="jarak">
+            <button id="cmdConvert" class="btn btn-warning">Konversi Nilai</button>
+        </div>
+
+    </div>
+
+    <script src="..//bootstrap-5.3.3/dist/css/bootstrap.min.css"></script>
+    <script src="..//bootstrap-5.3.3/jquery/jquery-3.7.1.min.js"></script>
+    <script>
+        //definisi script Konversi C=>F, F=>C
+        //Dari C->F = (C × 9/5) + 32
+        //Dari F-> = (F × 5/9) - 32
+        $(function(){
+            var pil =""
+            var txHASIL=""
+            $("select").on('change',function(){
+                 pil =$("select").val()
+                if(pil=="ctof"){
+                    $("#txc").prop("disabled",false)
+                    $("#txf").prop("disabled",true)
+                }else{
+                    $("#txf").prop("disabled",true)
+                    $("#txc").prop("disabled",false)
+                }
+            })
+            $("#cmdconvert").on("click",function(){
+                let nc=0
+                let nf=0
+                if(pil="ctof"){
+                   nc=$("#txc").val()
+                   nf=(nc*9/5)+32
+                   txHASIL= "<h3>Konverensi Nilai Celcius ke Fharenheit </h3>"
+                   txHASIL+="°F =( °c x 9/5) +32<br>"
+                   txHASIL+="°F = ("+nc+" x 9/5) +32<br>"
+                   txHASIL+="°F ="+nf
+                   $("#txF").val(nF)
+                   $("#txHASIL").html(txHASIL)               
+                }
+                if(pil=="ftoc"){
+                    nF =$("#txF").val()
+                    nC =$(nf*5/9)-32
+                    txHASIL ="<h3>Konverensi Nilai Fharenheit ke Celcius</h3>"
+                    txHASIL +="°C =(°F x 5/9)-32<br>"
+                    txHASIL +="°F =("+nF+" x 5/9)-32 <br>"
+                    txHASIL +="°F ="+nC+"°"
+                    $("#txC").val(nC)
+                    $("#txHASIL").html(txHASIL)
+                }
+        })
+    })
+    </script>
+</body>
+</html>

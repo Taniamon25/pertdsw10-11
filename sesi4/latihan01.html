@@ -23,6 +23,14 @@
         .bingkaislideshow{
             border-radius: 20px 0px;
         }
+       .produkitem{
+        height: 200px;
+        text-align: center;
+        object-fit: cover;
+       }
+       .card-title{
+        font-size: 18px;
+       }
     </style>
 </head>
 <body>
@@ -37,8 +45,32 @@
                     <a href="#project" class="btn btn-warning" >cek project</a>
                 </div>
             </div>
-            <div class="col"></div>
+            <div class="col">
+                <div id="carouselExample" class="carousel slide">
+                    <div class="carousel-inner bingkaislideshow" id="slider"></div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </button>
+                  </div>
+
+            </div>
         </div>
+    </div>
+    <div class="container">
+        <span class="text-mute" style="clear:both"></span>
+        <div class="row">
+            <a name="project"></a>
+            <div class="produklist">
+            </div>
+        </div>
+    </div>
+
+
         
         <footer style="clear:both;">
             <a href="#"> back to top </a>
@@ -52,9 +84,11 @@
     <script>
         $(function(){
             var NIM = "2401010705"
-            var urlAPI = "https://apimhstiki.ptov.my.id"
-            var urlAPIslideshow =urlAPI+"/slideshow/"+NIM
-
+            var urlAPI = "https://apimhstiki.ptov.my.id/"
+            var urlAPIslideshow =urlAPI+"slideshow/"+NIM
+            var urlproduklist =urlAPI+NIM+"/produk/list"
+            console.log(urlproduklist)
+           
             $.ajax({
                 url: urlAPIslideshow,
                 method : 'GET',
@@ -63,10 +97,45 @@
                     $("#judul").html(dta.judul)
                     $("#konten").html(dta.deskripsi)
                     $("#nama").html(dta.nama)
+                    let SS =""
+                    dta.images.forEach(function(gambar,idx){
+                        let aktif = idx===0 ? "active": ""
+                        SS += ` <div class="carousel-item ${aktif}">
+                        <img src="${gambar.url}" class="d-block w-100" alt="${gambar.alt}">
+                      </div>`
+                    })
+                    $("#slider").html(SS)
                 },
                 Error: function(xhr,txstt,ercode){
                     console.error("load data-> gagal")
                 }
+            })
+
+            $.ajax({
+                url:urlproduklist,
+                method:'GET',
+                datatype:'json',
+                success :function(dta){
+                    let kartu=""
+                    if(dta.error == '0' ){
+                     dta.produk.forEach(function(prd){
+                     kartu += `<div class="card" style="width: 15.5rem; float:left; margin: 15px;">
+                            <img src="${prd.IMG}" class="card-img-top" alt="${prd.ITEM}">
+                        <div class="card-body">
+                            <h5 class="card-title">${prd.ITEM}</h5>
+                            <p class="card-text">RP.${prd.HRGJUAL}</p>
+                            <a href="#" class="btn btn-warning">detail</a>
+                            <a href="#" class="btn btn-warning">order</a>
+                        </div>
+                        </div>`
+                        })
+                 $(".produklist").html(kartu)
+            }else{
+                    consule.log("Gagal load data produk")
+                    }
+                },
+                error:function(xhr,txstt,ercode){
+                    console.error("load data-> gagal")}
             })
         })
     </script>
